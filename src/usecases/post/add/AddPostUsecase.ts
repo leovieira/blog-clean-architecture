@@ -3,8 +3,11 @@ import AddPostInputDto from './AddPostInputDto';
 import AddPostOutputDto from './AddPostOutputDto';
 import PostGateway from '../../../domain/post/gateway/PostGateway';
 import Post from '../../../domain/post/entities/Post';
+import UserRepository from '../../../infra/repositories/user/UserRepository';
+import User from '../../../domain/post/entities/User';
+import UserDto from './UserDto';
 
-class AddPostUsecase implements Usecase<AddPostInputDto, AddPostOutputDto> {
+export default class AddPostUsecase implements Usecase<AddPostInputDto, AddPostOutputDto> {
 
     private postGateway: PostGateway;
 
@@ -12,25 +15,47 @@ class AddPostUsecase implements Usecase<AddPostInputDto, AddPostOutputDto> {
         this.postGateway = postGateway;
     }
 
-    create(gateway: PostGateway): AddPostUsecase {
+    static create(gateway: PostGateway): AddPostUsecase {
         return new AddPostUsecase(gateway);
     }
 
-    execute(input: AddPostInputDto): AddPostOutputDto {
-        var post = Post.create(
+    async execute(input: AddPostInputDto): Promise<AddPostOutputDto> {
+        const userRepo = new UserRepository;
+        const user = await userRepo.findByNickname(input.author);
+
+        if (user == null) {
+            throw new NotfoundException("User not found");
+        }
+
+        const postUser = User.with(
+            user.getId(),
+            user.getName(),
+            user.getEmail(),
+            user.getNickname(),
+            user.getPassword(),
+        )
+
+        const post = Post.create(
             input.title,
-            input.author,
+            postUser,
             input.content
         );
 
-        this.postGateway.save(post);
+        const newPost = await this.postGateway.save(post);
+
+        const userDto = new UserDto(
+            postUser.getId(),
+            postUser.getName(),
+            postUser.getEmail(),
+            postUser.getNickname()
+        );
 
         return new AddPostOutputDto(
-            post.getId(),
-            post.getTitle(),
-            post.getAuthor(),
-            post.getContent(),
-            post.getDate()
+            newPost.getId(),
+            newPost.getTitle(),
+            userDto,
+            newPost.getContent(),
+            newPost.getDate()
         );
     }
 

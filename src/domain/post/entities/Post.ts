@@ -2,8 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import AggregatteRoot from "../../shared/aggregatte/AggregatteRoot";
 import Entity from "../../shared/entities/Entity";
+import User from './User';
 import PostPolicy from '../policies/PostPolicy';
-import User from '../../user/entities/User';
+import DomainException from '../../shared/exceptions/DomainException';
 
 export default class Post extends Entity implements AggregatteRoot {
 

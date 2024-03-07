@@ -1,23 +1,20 @@
-export default class FindUserOutputDto {
+export default class UserDto {
 
     id: string;
     name: string;
     email: string;
     nickname: string;
-    password: string;
 
     constructor(
         id: string,
         name: string,
         email: string,
-        nickname: string,
-        password: string
+        nickname: string
     ) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.nickname = nickname;
-        this.password = password;
     }
 
 }

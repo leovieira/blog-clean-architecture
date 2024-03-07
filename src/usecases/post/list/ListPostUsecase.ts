@@ -6,7 +6,7 @@ import ListPostOutputDto from './ListPostOutputDto';
 import PostDto from './PostDto';
 import UserDto from './UserDto';
 
-class ListPostUsecase implements Usecase<ListPostInputDto, ListPostOutputDto> {
+export default class ListPostUsecase implements Usecase<ListPostInputDto, ListPostOutputDto> {
 
     private postGateway: PostGateway;
 
@@ -18,14 +18,19 @@ class ListPostUsecase implements Usecase<ListPostInputDto, ListPostOutputDto> {
         return new ListPostUsecase(postGateway);
     }
 
-    execute(input: ListPostInputDto): ListPostOutputDto {
-        var posts = this.postGateway.list();
-        var postsDto = this.createOutput(posts);
+    async execute(input: ListPostInputDto): Promise<ListPostOutputDto> {
+        if (input.author) {
+            var posts = await this.postGateway.listByAuthor(input.author);
+        } else {
+            var posts = await this.postGateway.list();
+        }
+
+        const postsDto = this.createOutput(posts);
         return new ListPostOutputDto(postsDto);
     }
 
     private createOutput(posts: Array<Post>): Array<PostDto> {
-        var postsDto: Array<PostDto> = new Array<PostDto>();
+        var postsDto = new Array<PostDto>();
 
         for (let p of posts) {
             var user = p.getAuthor();
@@ -33,8 +38,7 @@ class ListPostUsecase implements Usecase<ListPostInputDto, ListPostOutputDto> {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getNickname(),
-                user.getPassword()
+                user.getNickname()
             );
 
             postsDto.push(new PostDto(p.getId(), p.getTitle(), userDto, p.getContent(), p.getDate()));

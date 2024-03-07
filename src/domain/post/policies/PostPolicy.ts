@@ -1,5 +1,6 @@
-import Policy from '../../shared/policies/Policy';
 import Post from '../../post/entities/Post';
+import Policy from '../../shared/policies/Policy';
+import DomainException from '../../shared/exceptions/DomainException';
 
 export default class PostPolicy implements Policy<Post>{
 
@@ -17,7 +18,7 @@ export default class PostPolicy implements Policy<Post>{
         }
 
         // todo
-        if (entity.getAuthor()) {
+        if (entity.getAuthor() == null) {
             throw new DomainException("Post author must be registered");
         }
     }

@@ -1,4 +1,4 @@
-export default class FindUserInputDto {
+export default class FindPostInputDto {
 
     id: string;
 

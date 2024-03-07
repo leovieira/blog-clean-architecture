@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Entity from '../../shared/entities/Entity';
 import AggregatteRoot from '../../shared/aggregatte/AggregatteRoot';
+import DomainException from '../../shared/exceptions/DomainException';
 
 export default class User extends Entity implements AggregatteRoot {
 

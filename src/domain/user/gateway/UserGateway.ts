@@ -1,6 +1,6 @@
 import User from '../entities/User';
 
 export default interface UserGateway {
-    save(user: User): void;
-    find(id: string): User;
+    save(user: User): Promise<User>;
+    findByNickname(nickname: string): Promise<User>;
 }

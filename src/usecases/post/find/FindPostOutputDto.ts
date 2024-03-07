@@ -1,6 +1,6 @@
-import UserDto from './UserDto';
+import UserDto from "./UserDto";
 
-export default class AddPostOutputDto {
+export default class FindPostOutputDto {
 
     id: string;
     title: string;

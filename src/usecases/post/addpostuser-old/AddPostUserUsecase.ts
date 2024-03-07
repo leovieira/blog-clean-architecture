@@ -3,7 +3,7 @@ import AddPostUserInputDto from './AddPostUserInputDto';
 import AddPostUserOutputDto from './AddPostUserOutputDto';
 import PostGateway from '../../../domain/post/gateway/PostGateway';
 import UserGateway from '../../../domain/user/gateway/UserGateway';
-import User from '../../../domain/user/entities/User';
+import User from '../../../domain/post/entities/User';
 
 class AddPostUserUsecase implements Usecase<AddPostUserInputDto, AddPostUserOutputDto> {
 
